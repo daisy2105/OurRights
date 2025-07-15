@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rights Guard: interactive constitution learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0.3;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8d8372 0%, #573e07 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+    </style>
+    <body>
+        <header>
+            <nav class = "container">
+                <a href="#" class="logo">
+                Rights Guard
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#learn">Learn</a></li>
+                <li><a href="#Connect">Connect</a></li>
+                <li><a href="#protect">protect</a></li>
+                <li><a href="login.html" class="login-link">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <a href="login.html" class="mobile-login" id="mobileLogin">
+        <i class="fas fa-sign-in-alt"></i> Login
+    </a>
+    </body>
+</head>
