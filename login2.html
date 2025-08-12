@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>LAW HUB - Login</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <head      .container {
+        max-width: 400px;
+        width: 90%;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(8px);   <title>LAW HUB - Login</title>
+  <!-- Supabase JS client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="simple-style.css">
     <script src="simple-script.js"></script>
     <style>
@@ -33,7 +35,7 @@
       .container {
         max-width: 400px;
         width: 90%;
-        background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.65);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
         border: 1px solid rgba(255, 255, 255, 0.4);
@@ -112,15 +114,23 @@
         border-top: 1px solid rgba(255, 255, 255, 0.1);
       }
       .error-message {
-        color: #ff6b6b;
+        color: #d32f2f;
+        background: rgba(255,255,255,0.7);
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-weight: 500;
+        margin-bottom: 6px;
         font-size: 14px;
-        margin-bottom: 10px;
         text-align: center;
       }
       .success-message {
-        color: #4ecdc4;
-        font-size: 15px;
-        margin-bottom: 10px;
+        color: #388e3c;
+        background: rgba(255,255,255,0.7);
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-weight: 500;
+        margin-bottom: 6px;
+        font-size: 14px;
         text-align: center;
       }
       a {
@@ -196,8 +206,6 @@
 
       function validateLogin(event) {
         event.preventDefault();
-        document.getElementById('login-error').textContent = '';
-        document.getElementById('login-success').textContent = '';
 
         const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
@@ -205,38 +213,31 @@
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         if (!emailPattern.test(email)) {
-          document.getElementById('login-error').textContent = 'Please enter a valid email address.';
+          alert('Please enter a valid email address.');
           return;
         }
         const passPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
         if (!passPattern.test(password)) {
-          document.getElementById('login-error').textContent = 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.';
+          alert('Password must be at least 8 characters and include uppercase, lowercase, number, and special character.');
           return;
         }
 
-        // Start loading state
         setButtonLoading(submitButton, true);
-
-        // Simple Firebase Authentication
-        auth.signInWithEmailAndPassword(email, password)
-          .then((userCredential) => {
-            const user = userCredential.user;
-            console.log('Login successful:', user.email);
-            
-            // Stop loading state
-            setButtonLoading(submitButton, false);
-            
-            showLoginSuccessDialog(() => {
-              window.location.href = 'simple-index.html';
-            });
-          })
-          .catch((error) => {
-            // Stop loading state on error
-            setButtonLoading(submitButton, false);
-            
-            console.error('Login error:', error);
-            document.getElementById('login-error').textContent = getErrorMessage(error.code);
+        // Supabase login
+        const supabase = window.supabase.createClient(
+          'https://wnejyltcmihxiwvqgspx.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InduZWp5bHRjbWloeGl3dnFnc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mjk1ODcsImV4cCI6MjA3MDUwNTU4N30.pIYpLXs0YLmXiPi8Bkio-goGpBKSFdaiDcJtBePz8wQ'
+        );
+        supabase.auth.signInWithPassword({ email, password }).then(({ data, error }) => {
+          setButtonLoading(submitButton, false);
+          if (error) {
+            alert(error.message || 'Login failed.');
+            return;
+          }
+          showLoginSuccessDialog(() => {
+            window.location.href = 'dashboard.html';
           });
+        });
       }
 
       function getErrorMessage(errorCode) {
@@ -269,8 +270,6 @@
       <h1 class="t">Ready to Master Justice? ⚖️</h1>
       
       <form id="login-form" onsubmit="validateLogin(event)">
-        <div id="login-error" class="error-message"></div>
-        <div id="login-success" class="success-message"></div>
         <input id="login-email" type="text" placeholder="Email" required>
         <input id="login-password" type="password" placeholder="Password" required>
         

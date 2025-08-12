@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>LAW HUB - Sign Up</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <hea      .container {
+        max-width: 400px;
+        width: 90%;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(8px);   <title>LAW HUB - Sign Up</title>
+  <!-- Supabase JS client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="simple-style.css">
     <script src="simple-script.js"></script>
     <style>
@@ -33,7 +35,7 @@
       .container {
         max-width: 400px;
         width: 90%;
-        background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.65);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
         border: 1px solid rgba(255, 255, 255, 0.4);
@@ -112,15 +114,23 @@
         border-top: 1px solid rgba(255, 255, 255, 0.1);
       }
       .error-message {
-        color: #ff6b6b;
+        color: #d32f2f;
+        background: rgba(255,255,255,0.7);
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-weight: 500;
+        margin-bottom: 6px;
         font-size: 14px;
-        margin-bottom: 10px;
         text-align: center;
       }
       .success-message {
-        color: #4ecdc4;
-        font-size: 15px;
-        margin-bottom: 10px;
+        color: #388e3c;
+        background: rgba(255,255,255,0.7);
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-weight: 500;
+        margin-bottom: 6px;
+        font-size: 14px;
         text-align: center;
       }
       a {
@@ -188,8 +198,6 @@
 
       function validateSignup(event) {
         event.preventDefault();
-        document.getElementById('signup-error').textContent = '';
-        document.getElementById('signup-success').textContent = '';
 
         const name = document.getElementById('signup-name').value.trim();
         const email = document.getElementById('signup-email').value.trim();
@@ -201,50 +209,45 @@
         const passPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
         if (name === '') {
-          document.getElementById('signup-error').textContent = 'Please enter your name.';
+          alert('Please enter your name.');
           return;
         }
         if (!emailPattern.test(email)) {
-          document.getElementById('signup-error').textContent = 'Please enter a valid email address.';
+          alert('Please enter a valid email address.');
           return;
         }
         if (!passPattern.test(password)) {
-          document.getElementById('signup-error').textContent = 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.';
+          alert('Password must be at least 8 characters and include uppercase, lowercase, number, and special character.');
           return;
         }
         if (password !== confirmPassword) {
-          document.getElementById('signup-error').textContent = 'Passwords do not match.';
+          alert('Passwords do not match.');
           return;
         }
 
-        // Start loading state
         setButtonLoading(submitButton, true);
-
-        // Create Firebase account - simple email/password
-        auth.createUserWithEmailAndPassword(email, password)
-          .then((userCredential) => {
-            const user = userCredential.user;
-            
-            // Update user profile
-            return user.updateProfile({
-              displayName: name
-            });
-          })
-          .then(() => {
-            // Stop loading state
-            setButtonLoading(submitButton, false);
-            
-            showSignupSuccessDialog(() => {
-              window.location.href = 'login2.html';
-            });
-          })
-          .catch((error) => {
-            // Stop loading state on error
-            setButtonLoading(submitButton, false);
-            
-            console.error('Signup error:', error);
-            document.getElementById('signup-error').textContent = getSignupErrorMessage(error.code);
+        // Supabase sign up
+        const supabase = window.supabase.createClient(
+          'https://wnejyltcmihxiwvqgspx.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InduZWp5bHRjbWloeGl3dnFnc3B4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mjk1ODcsImV4cCI6MjA3MDUwNTU4N30.pIYpLXs0YLmXiPi8Bkio-goGpBKSFdaiDcJtBePz8wQ'
+        );
+        supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { name }
+          }
+        }).then(({ data, error }) => {
+          setButtonLoading(submitButton, false);
+          if (error) {
+            alert(error.message || 'Signup failed.');
+            return;
+          }
+          alert('✅ Signup successful! Please check your email to verify your account.');
+          showSignupSuccessDialog(() => {
+            window.location.href = 'login2.html';
           });
+        });
       }
 
       function getSignupErrorMessage(errorCode) {
@@ -272,8 +275,6 @@
     <div class="container">
       <h1 class="t">Join LawHub ⚖️</h1>
       <form id="signup-form" onsubmit="validateSignup(event)">
-        <div id="signup-error" class="error-message"></div>
-        <div id="signup-success" class="success-message"></div>
         <input id="signup-name" type="text" placeholder="Name" required>
         <input id="signup-email" type="text" placeholder="Email" required>
         <input id="signup-password" type="password" placeholder="Password" required>
