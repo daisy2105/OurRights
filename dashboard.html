@@ -13,7 +13,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop') center/cover;
@@ -22,7 +21,6 @@
             overflow-x: hidden;
             position: relative;
         }
-
         body::before {
             content: '';
             position: fixed;
@@ -33,7 +31,6 @@
             background: rgba(44, 62, 80, 0.85);
             z-index: -1;
         }
-
         body::after {
             content: '';
             position: fixed;
@@ -44,13 +41,10 @@
             background: linear-gradient(135deg, rgba(52, 73, 94, 0.3) 0%, rgba(44, 62, 80, 0.3) 100%);
             z-index: -2;
         }
-
         .app-container {
             display: flex;
             min-height: 100vh;
         }
-
-        /* Sidebar */
         .sidebar {
             width: 280px;
             background: rgba(255, 255, 255, 0.1);
@@ -63,24 +57,20 @@
             z-index: 1000;
             transition: transform 0.3s ease;
         }
-
         .sidebar.mobile-hidden {
             transform: translateX(-100%);
         }
-
         .logo {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
-
         .logo h2 {
             color: white;
             font-size: 24px;
             margin-bottom: 5px;
         }
-
         .logo p {
             color: rgba(255, 255, 255, 0.8);
             font-size: 12px;
@@ -180,7 +170,6 @@
             gap: 15px;
         }
 
-        /* Search Bar Styles */
         .search-container {
             flex: 1;
             max-width: 400px;
@@ -273,7 +262,6 @@
             100% { box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3); }
         }
 
-        /* WhatsApp Style Chat Box */
         .chat-container {
             position: fixed;
             bottom: 100px;
